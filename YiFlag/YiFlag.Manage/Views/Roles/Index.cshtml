@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewBag.Title = "角色功能管理";
+}
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">@ViewBag.Title</div>
+                <div class="layui-card-body" pad15>
+
+
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+
+
+                                <table class="layui-hide" id="test" lay-filter="test" }"></table>
+
+                                <script type="text/html" id="toolbarDemo">
+                                    <div class="layui-btn-container">
+                                        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+                                    </div>
+                                </script>
+
+
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo">
+
+                                <div class="layui-btn-container">
+                                    <button type="button" class="layui-btn layui-btn-sm" lay-demo="getChecked">获取选中节点数据</button>
+                                    <button type="button" class="layui-btn layui-btn-sm" lay-demo="setChecked">勾选指定节点</button>
+                                    <button type="button" class="layui-btn layui-btn-sm" lay-demo="reload">重载实例</button>
+                                </div>
+
+                                <div id="test12" class="demo-tree-more"></div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="button" class="layui-btn layui-btn-sm" onclick="savaRolesAuthority()">保存</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function savaRolesAuthority() {
+            var table = layui.table;
+            var checkStatus = table.checkStatus('test');
+            var Id = checkStatus.data[0].Id;
+
+            var tree = layui.tree;
+            console.log(tree);
+            var checkedData = tree.getChecked('demoId1');
+            console.log(checkedData);
+            alert(JSON.stringify({ rolesId: Id, tree: checkedData }))
+            $.ajax({
+                url: '/Roles/SetRolesAuthority?s=' + JSON.stringify({ tree: checkedData }) + '+&rolesId=' + Id,
+                method: 'get',
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (res) {
+                    if (res.state == 1) {
+                        layer.alert(res.msg);
+                    }
+                    else {
+                        layer.alert(res.msg);
+                    }
+                },
+                error: function () {
+
+                }
+            })
+        };
+        $(document).ready(function () {
+          
+            var treedata;
+
+            $.ajax({
+                url: '/Roles/GetMenueTree',
+                type: "post",
+                contentType: 'application/json',
+                dataType: "json",//这
+                success: function (res) {
+                    if (res.code == 1) {
+                        treedata = res.data;
+                    }
+                }
+            });
+
+            layui.use(['table', 'tree', 'util'], function () {
+                var table = layui.table;
+                var tree = layui.tree
+                   , layer = layui.layer
+                   , util = layui.util
+                   , data = treedata;
+
+                table.render({
+                    elem: '#test'
+                  , url: '/Roles/GetRoles'
+                  , toolbar: '#toolbarDemo'
+                  , cols: [[
+                    { type: 'radio' }
+                    , { field: 'Id', width: 80, title: 'ID', sort: true }
+                    , { field: 'RolesName', width: 120, title: '角色名' }
+                    , { field: 'Remark', width: 120, title: '备注' }
+                    , { field: 'CreateTime', width: 160, title: '创建时间' }
+                  ]]
+                  , page: true
+                });
+
+
+
+                //基本演示
+                tree.render({
+                    elem: '#test12'
+                  , data: data
+                  , showCheckbox: true  //是否显示复选框
+                  , id: 'demoId1'
+                  , isJump: true //是否允许点击节点时弹出新窗口跳转
+                  , click: function (obj) {
+                      var data = obj.data;  //获取当前点击的节点数据
+                      layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                  }
+                });
+
+
+                table.on('radio(test)', function (obj) {
+                    $.ajax({
+                        url: '/Roles/GetRolesMenue?Id=' + obj.data.Id,
+                        type: 'Get',
+                        dataType: 'json',
+                        contentType: "application/json",
+                        success: function (res) {
+                            if (res.state == 1) {
+                                alert("获取权限菜单成功");
+                                if (res.data.length > 0) {
+                                    tree.reload('demoId1', {
+                                        data: treedata
+                                    });
+                                    tree.setChecked('demoId1', res.data); //批量勾选 id 为 2、3 的节点
+                                }
+
+
+                            }
+                            else {
+                                alert("获取权限失败");
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    });
+                });
+
+                //头工具栏事件
+                table.on('toolbar(test)', function (obj) {
+                    var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+                    switch (obj.event) {
+                        case 'getCheckData':
+                            var data = checkStatus.data;  //获取选中行数据
+                            layer.alert(JSON.stringify(data));
+                            break;
+                    };
+                });
+
+
+
+
+                //按钮事件
+                util.event('lay-demo', {
+                    getChecked: function (othis) {
+                        var checkedData = tree.getChecked('demoId1'); //获取选中节点的数据
+                        layer.alert(JSON.stringify(checkedData), { shade: 0 });
+                        console.log(checkedData);
+                    }
+                  , setChecked: function () {
+                      tree.setChecked('demoId1', [12, 16]); //勾选指定节点
+                  }
+                  , reload: function () {
+                      //重载实例
+                      tree.reload('demoId1', {
+
+                      });
+
+                  }
+                });
+
+            });
+        });
+    </script>
+
+}

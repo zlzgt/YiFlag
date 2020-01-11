@@ -1,0 +1,37 @@
+﻿@using YiFlag.Model
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <script src="~/scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/scripts/ckeditor/config.js"></script>
+
+</head>
+<body>
+    <div class="ph-heart-nav nav">
+        <a href="/Home/Index">@WebConfig.Name</a>
+        <a href="/Home/Index">首页</a>
+        <a href="/User/Index">个人日记</a>
+        <a href="/Account/Index">@CurrentManage.UserName</a>
+        <div class="effect"></div>
+    </div>
+    <div class="container body-content">
+      
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year -YiFlag</p>
+        </footer>
+    </div>
+    <script src="~/layui/layui.js"></script>
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/Verification")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

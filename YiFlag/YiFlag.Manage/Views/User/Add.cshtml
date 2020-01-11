@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "添加个人信息";
+}
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">@ViewBag.Title</div>
+                    <div class="layui-card-body" pad15>
+
+                        <form class="layui-form" action="">
+                           
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-block">
+                                    <input name="UserName" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="用户名是必填项，岂能为空？">
+                                </div>
+                            </div>
+
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-block">
+                                    <input name="Pwd" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">验证手机</label>
+                                    <div class="layui-input-inline">
+                                        <input name="Tel" class="layui-input" type="tel" autocomplete="off" lay-verify="required|phone">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">邮箱</label>
+                                    <div class="layui-input-inline">
+                                        <input name="Email" class="layui-input" type="text" autocomplete="off" lay-verify="email">
+                                    </div>
+                                </div>
+                            </div>
+
+                       
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block">
+                                    <input name="Sex" title="男" type="radio" checked="" value="1">
+                                    <input name="Sex" title="女" type="radio" value="0">
+                                  
+                                </div>
+                            </div>
+                            @*<div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">普通文本域</label>
+                                <div class="layui-input-block">
+                                    <textarea class="layui-textarea" placeholder="请输入内容"></textarea>
+                                </div>
+                            </div>*@
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-filter="demo1" lay-submit="">立即提交</button>
+                                    <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts{
+    <script>
+        layui.config({
+            base: '../../LayUI/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'set']);
+
+
+        layui.use(['layer', 'form'], function () {
+            var form = layui.form;
+
+            form.on('submit(demo1)', function (data) {
+                layer.msg(JSON.stringify(data.field));     
+                JSON.stringify(data.field)
+                var articleFrom = data.field.articleFrom;
+                var articleSummary = data.field.articleSummary;
+
+                alert('ceshi');
+
+                $.ajax({
+                    url: '/User/AddResult',      
+                    type: 'Post',
+                    dataType: 'json',
+                    contentType: "application/json",
+                    data:JSON.stringify(data.field),
+                    success: function (e) {
+                        if (e.code == 0) {
+                            layer.msg(e.msg);
+                        } else {
+                            layer.msg(e.msg);
+                        }
+                    },
+                    error: function (e) {
+                        layer.msg(e);
+                    }
+                })
+            })
+ 
+        });
+
+    </script>
+}

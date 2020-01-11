@@ -1,0 +1,135 @@
+/* ---- reset ------*/
+html, body, div, a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline; }
+
+html {
+  line-height: 1; }
+
+
+/* --- basic styles ----*/
+
+body {
+  font-family: "Unica One";
+  font-size: 1.5em;
+  background: #f2f2f2;
+  text-shadow: 0 1px 0 white; }
+
+/* --- for all three examples ----*/
+
+.nav {
+  text-align: center;
+  overflow: hidden;
+  margin: 2em auto;
+  width: 480px;
+  position: relative; }
+  .nav a {
+    display: block;
+    position: relative;
+		float: left;
+		padding: 1em 0 2em;
+    width: 25%;
+		text-decoration: none;
+	  color: #393939;
+	  -webkit-transition: .7s;
+	  -moz-transition: .7s;
+	  -o-transition: .7s;
+	  -ms-transition: .7s;
+	  transition: .7s; }
+	  .nav a:hover {
+	    color: #c6342e; }
+
+.effect {
+	position: absolute;
+  left: -12.5%;
+  -webkit-transition: 0.7s ease-in-out;
+  -moz-transition: 0.7s ease-in-out;
+  -o-transition: 0.7s ease-in-out;
+  -ms-transition: 0.7s ease-in-out;
+  transition: 0.7s ease-in-out; }
+
+	.nav a:nth-child(1):hover ~ .effect {
+	  left: 12.5%; }
+	.nav a:nth-child(2):hover ~ .effect {
+	  left: 37.5%; }
+	.nav a:nth-child(3):hover ~ .effect {
+	  left: 62.5%; }
+	.nav a:nth-child(4):hover ~ .effect {
+	  left: 87.5%; }
+
+/* ----- line example -----*/
+
+.ph-line-nav .effect {
+  width: 90px;
+  height: 2px;
+  bottom: 36px;
+  background: #c6342e;
+  box-shadow: 0 1px 0 white; 
+  margin-left:-45px;
+}
+
+/* ----- dot example -----*/
+
+.ph-dot-nav:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: #c6342e;
+  bottom: 40px; }
+.ph-dot-nav a:after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  bottom: 38px;
+  left: 50%;
+  margin-left: -2px; 
+  background: #c6342e;
+  border-radius: 100%; }
+.ph-dot-nav .effect {
+  width: 10px;
+  height: 10px;
+  bottom: 36px; 
+	margin-left: -5px;
+  background: #c6342e;
+  border-radius: 100%; }
+
+/* ----- heart example -----*/
+
+.ph-heart-nav .effect, .ph-heart-nav a:after, .ph-heart-nav a:before {
+  background: url('../images/heart.png') no-repeat; }
+.ph-heart-nav .effect {
+  position: absolute;
+  bottom: 26px;
+  background-position: 0 0;
+  height: 8px;
+  width: 62px; 
+  margin-left:-31px; }
+
+.ph-heart-nav a:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  background-position: -62px 0;
+  height: 20px;
+  width: 11px;
+  margin-left: -11px; }
+
+.ph-heart-nav a:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  z-index: 1;
+  background-position: -73px 0;
+  height: 20px;
+  width: 11px; }

@@ -1,0 +1,22 @@
+﻿@model YiFlag.Model.Blog
+@{
+    ViewBag.Title = "GetBlogDetail";
+}
+
+
+<div style="width:100%;">
+    <div style="width:1200px; margin:0 auto">
+        <br />
+        <h2 style="text-align:center">@Html.DisplayFor(model => model.Title)</h2>
+        <br />
+        <br />
+        <h6 style="text-align:center">发布时间:@Html.DisplayFor(model => model.AddTime)</h6>
+        <br />
+        <br />
+        <br />
+        <div style="width:1200px;">
+         @Html.Raw(Model.SummaryContent)
+        </div>
+        <br />
+    </div>
+</div>
