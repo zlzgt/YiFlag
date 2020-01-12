@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -76,6 +77,7 @@ namespace YiFlag.Manage.Controllers
 
         public JsonResult SetRolesAuthority(string s, int rolesId)
         {
+            DbContextTransaction transaction = null;
             try
             {
                 List<int> iResultList = new List<int>();
@@ -90,32 +92,43 @@ namespace YiFlag.Manage.Controllers
                 }
                 using (YiFlagContext dbContext = new YiFlagContext())
                 {
-                    List<SysRolesMenueFuction> sysRolesMenueList = new List<SysRolesMenueFuction>();
-                    var sysRolesMenueFuction = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == rolesId).ToList();
-                    if (sysRolesMenueFuction != null)
-                        dbContext.Set<SysRolesMenueFuction>().RemoveRange(sysRolesMenueFuction);
-                    foreach (int item in iResultList)
+                    using(transaction=dbContext.Database.BeginTransaction())
                     {
-                        SysRolesMenueFuction sysRolesMenue = new SysRolesMenueFuction();
-                        sysRolesMenue.MenuId = item;
-                        sysRolesMenue.RolesId = rolesId;
-                        sysRolesMenue.CreateTime = DateTime.Now;
-                        sysRolesMenueList.Add(sysRolesMenue);
+                        List<SysRolesMenueFuction> sysRolesMenueList = new List<SysRolesMenueFuction>();
+                        var sysRolesMenueFuction = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == rolesId).ToList();
+                        if (sysRolesMenueFuction != null)
+                        {
+                            dbContext.Set<SysRolesMenueFuction>().RemoveRange(sysRolesMenueFuction);
+                            dbContext.SaveChanges();
+                        }
+
+                        foreach (int item in iResultList)
+                        {
+                            SysRolesMenueFuction sysRolesMenue = new SysRolesMenueFuction();
+                            sysRolesMenue.MenuId = item;
+                            sysRolesMenue.RolesId = rolesId;
+                            sysRolesMenue.CreateTime = DateTime.Now;
+                            sysRolesMenueList.Add(sysRolesMenue);
+                        }
+                        dbContext.Set<SysRolesMenueFuction>().AddRange(sysRolesMenueList);
+                        int iResult = dbContext.SaveChanges();
+                        if (iResult > 0)
+                        {
+                            transaction.Commit();
+                            return Json(new { state = 1, msg = "角色权限菜单配置成功" }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { state = -1, msg = "角色权限菜单配置失败" }, JsonRequestBehavior.AllowGet);
+                        }
                     }
-                    dbContext.Set<SysRolesMenueFuction>().AddRange(sysRolesMenueList);
-                    int iResult = dbContext.SaveChanges();
-                    if (iResult > 0)
-                    {
-                        return Json(new { state = 1, msg = "角色权限菜单配置成功" }, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        return Json(new { state = -1, msg = "角色权限菜单配置失败" }, JsonRequestBehavior.AllowGet);
-                    }
+                  
+                   
                 }
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 LogHelper.WriteLog($"角色权限菜单配置出现异常{ex.Message}", Log4NetLevel.Error);
                 return Json(new { state = -1, msg = "角色权限菜单配置出现异常" }, JsonRequestBehavior.AllowGet);
             }
