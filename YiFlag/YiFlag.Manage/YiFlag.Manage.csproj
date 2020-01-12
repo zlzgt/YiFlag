@@ -336,6 +336,10 @@
     <Content Include="LayUI\layuiadmin\tpl\说明.txt" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="LayUI\layuiadmin\layui\font\iconfont.eot" />
+    <Content Include="LayUI\layuiadmin\layui\font\iconfont.ttf" />
+    <Content Include="LayUI\layuiadmin\layui\font\iconfont.woff" />
+    <Content Include="LayUI\layuiadmin\layui\font\iconfont.woff2" />
     <None Include="scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="scripts\jquery-3.0.0.js" />
     <Content Include="scripts\jquery-3.0.0.min.js" />
@@ -365,10 +369,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="LayUI\layuiadmin\layui\font\iconfont.eot" />
-    <Content Include="LayUI\layuiadmin\layui\font\iconfont.ttf" />
-    <Content Include="LayUI\layuiadmin\layui\font\iconfont.woff" />
-    <Content Include="LayUI\layuiadmin\layui\font\iconfont.woff2" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />

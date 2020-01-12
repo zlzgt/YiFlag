@@ -10,19 +10,18 @@ namespace YiFlag.Model
 
     public class TreeChildViewModel
     {
-        public int id { get; set;}
-        public string title { get; set;}
-     
-        public List<TreeChildViewModel> children { get; set;}
+        public int id { get; set; }
+        public string title { get; set; }
+        public List<TreeChildViewModel> children { get; set; }
     }
     public class MenueTree
     {
 
-        public List<TreeChildViewModel> AddChildN(int  Pid)
+        public List<TreeChildViewModel> AddChildN(int Pid)
         {
             using (YiFlagContext dbContext = new YiFlagContext())
             {
-                var data = dbContext.Set<SysMenue>().Where(x =>x.ParentId == Pid).ToList();//这里是获取数据
+                var data = dbContext.Set<SysMenue>().Where(x => x.ParentId == Pid).ToList();//这里是获取数据
                 List<TreeChildViewModel> list = new List<TreeChildViewModel>();
                 foreach (var item in data)
                 {
@@ -35,13 +34,13 @@ namespace YiFlag.Model
                 }
                 return list;
             }
-          
+
         }
         public List<TreeChildViewModel> GetChildList(TreeChildViewModel treeChildView)
         {
             using (YiFlagContext dbContext = new YiFlagContext())
             {
-                if(dbContext.Set<SysMenue>().Where(w=>w.ParentId==treeChildView.id).ToList().Count==0)
+                if (dbContext.Set<SysMenue>().Where(w => w.ParentId == treeChildView.id).ToList().Count == 0)
                 {
                     return null;
                 }
@@ -49,7 +48,7 @@ namespace YiFlag.Model
                 {
                     return AddChildN(treeChildView.id);
                 }
-            }  
+            }
         }
     }
 }

@@ -58,7 +58,6 @@ namespace YiFlag.Manage.Controllers
 
         public JsonResult GetRolesMenue(int Id)
         {
-
             using (YiFlagContext dbContext = new YiFlagContext())
             {
                 List<int> menueId = null;
@@ -68,7 +67,7 @@ namespace YiFlag.Manage.Controllers
                 }
                 else
                 {
-                    menueId = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == Id).Select(w => w.MenuId).ToList<int>();
+                    menueId = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == Id).Select(w => w.MenuId).OrderBy(w=>w).ToList<int>();
                 }
                 return Json(new { state = 1, msg = "获取菜单成功", data = menueId }, JsonRequestBehavior.AllowGet);
             }
