@@ -14,7 +14,7 @@ namespace YiFlag.Tools
     {
       static  LogHelper()
         {
-            XmlConfigurator.Configure(new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CfgFiles\\log4netfile.cfg.xml")));
+            XmlConfigurator.Configure(new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CfgFiles\\log4netfile.Config")));
             ILog Log = LogManager.GetLogger(typeof(LogHelper));
             Log.Info("系统初始化Logger模块");
         }

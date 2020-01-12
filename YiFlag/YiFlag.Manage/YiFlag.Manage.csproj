@@ -25,6 +25,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -175,9 +176,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CfgFiles\log4netfile.cfg.xml">
+    <None Include="CfgFiles\log4netfile.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Global.asax" />
     <Content Include="LayUI\layuiadmin\config.js" />
     <Content Include="LayUI\layuiadmin\json\console\top-card.js" />
