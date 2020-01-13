@@ -20,7 +20,7 @@ namespace YiFlag.Manage.Controllers
         {
             return View();
         }
-
+        #region 获取角色列表
         public JsonResult GetRoles(PageModle msg)
         {
             HttpRequest request = System.Web.HttpContext.Current.Request;
@@ -47,7 +47,7 @@ namespace YiFlag.Manage.Controllers
                 return Json(new { code = 0, count, data = rolesList, msg = "获取数据成功" }, JsonRequestBehavior.AllowGet);
             }
         }
-
+        #endregion
 
         #region 获取菜单树
         public JsonResult GetMenueTree()
@@ -144,6 +144,14 @@ namespace YiFlag.Manage.Controllers
                 return Json(new { state = -1, msg = "角色权限菜单配置出现异常" }, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
+
+        #region 角色管理页面
+        public ActionResult Manage()
+        {
+            return View();
+        }
+
         #endregion
 
 

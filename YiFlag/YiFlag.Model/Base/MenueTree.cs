@@ -12,6 +12,7 @@ namespace YiFlag.Model
     {
         public int id { get; set; }
         public string title { get; set; }
+        public bool spread { get; set; } = true;
         public List<TreeChildViewModel> children { get; set; }
     }
     public class MenueTree

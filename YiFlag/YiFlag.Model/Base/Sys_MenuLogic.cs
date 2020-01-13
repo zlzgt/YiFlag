@@ -24,9 +24,6 @@ namespace AuthorityYiFlag.Model
 
             using (YiFlagContext dbContext = new YiFlagContext())
             {
-
-
-
                 var sql = @"select * from SysMenue where 1=1 and state=1 order by sort asc";
 
                 Account account = SessionHelper.GetSession<Account>("account");

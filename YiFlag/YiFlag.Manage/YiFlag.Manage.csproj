@@ -383,6 +383,7 @@
     <Content Include="scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="scripts\jquery-3.0.0.min.map" />
     <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Roles\Manage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

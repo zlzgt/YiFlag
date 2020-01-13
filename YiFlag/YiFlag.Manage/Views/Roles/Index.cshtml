@@ -66,7 +66,7 @@
                 ]]
                 , page: true
             });
-            //基本演示
+            //树形菜单初始化
             tree.render({
                 elem: '#test12'
                 , data: treeGetData()
@@ -78,6 +78,7 @@
                 }
             });
 
+            //显示不同角色的权限
             table.on('radio(test)', function (obj) {
                 $.ajax({
                     url: '/Roles/GetRolesMenue?Id=' + obj.data.Id,
@@ -115,6 +116,8 @@
             });
 
         });
+
+        //获取树形菜单
         function treeGetData() {
             var treedata = [];
             $.ajax({
@@ -126,12 +129,13 @@
                 success: function (res) {
                     if (res.code == 1) {
                         treedata = res.data;
-                        console.log(res.data);
                     }
                 }
             });
             return treedata;
         }
+
+      //保存角色的权限
       function savaRolesAuthority() {
                 var table = layui.table;
                 var checkStatus = table.checkStatus('test');
