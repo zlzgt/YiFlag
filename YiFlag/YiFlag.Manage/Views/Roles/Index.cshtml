@@ -30,18 +30,14 @@
                             <div class="grid-demo">
 
                                 <div class="layui-btn-container">
-                                    <button type="button" class="layui-btn layui-btn-sm" onclick="savaRolesAuthority()">提交权限设置</button>
+                                    <button type="button" class="layui-btn layui-btn-sm" onclick="savaRolesAuthority()">提交角色权限</button>
                                 </div>
 
                                 <div id="test12" class="demo-tree-more"></div>
 
-
                             </div>
                         </div>
                     </div>
-
-
-
 
                 </div>
             </div>
@@ -95,7 +91,7 @@
                                 tree.reload('treeId', {
                                     data: treeGetData()
                                 });
-                                tree.setChecked('treeId', res.data); //批量勾选 id 为 2、3 的节点
+                                tree.setChecked('treeId', res.data); //批量勾选 
                             }
                         }
                         else {

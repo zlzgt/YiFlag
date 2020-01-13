@@ -47,6 +47,9 @@ namespace YiFlag.Manage.Controllers
                 return Json(new { code = 0, count, data = rolesList, msg = "获取数据成功" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        #region 获取菜单树
         public JsonResult GetMenueTree()
         {
             List<TreeChildViewModel> treeViewModels = new List<TreeChildViewModel>();
@@ -55,25 +58,36 @@ namespace YiFlag.Manage.Controllers
             string s = JsonConvert.SerializeObject(treeViewModels);
             return Json(new { code = 1, data = treeViewModels, msg = "获取数据成功" }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
+        #region 获取角色菜单
         public JsonResult GetRolesMenue(int Id)
         {
             using (YiFlagContext dbContext = new YiFlagContext())
             {
-                List<int> menueId = null;
+                List<int> menueId = new List<int>();
+                MenueTree menue = new MenueTree();
                 if (Id == 1)
                 {
                     menueId = dbContext.Set<SysMenue>().Select(w => w.Id).ToList<int>();
                 }
                 else
                 {
-                    menueId = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == Id).Select(w => w.MenuId).OrderBy(w=>w).ToList<int>();
+                    var menues = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == Id).Select(w => w.MenuId).OrderBy(w => w).ToList<int>();
+                    foreach (var item in menues)
+                    {
+                        if (!menue.IsHasChild(item))
+                        {
+                            menueId.Add(item);
+                        }
+                    }
                 }
                 return Json(new { state = 1, msg = "获取菜单成功", data = menueId }, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
-
+        #region  设置角色权限
         public JsonResult SetRolesAuthority(string s, int rolesId)
         {
             DbContextTransaction transaction = null;
@@ -91,7 +105,7 @@ namespace YiFlag.Manage.Controllers
                 }
                 using (YiFlagContext dbContext = new YiFlagContext())
                 {
-                    using(transaction=dbContext.Database.BeginTransaction())
+                    using (transaction = dbContext.Database.BeginTransaction())
                     {
                         List<SysRolesMenueFuction> sysRolesMenueList = new List<SysRolesMenueFuction>();
                         var sysRolesMenueFuction = dbContext.Set<SysRolesMenueFuction>().Where(w => w.RolesId == rolesId).ToList();
@@ -121,8 +135,6 @@ namespace YiFlag.Manage.Controllers
                             return Json(new { state = -1, msg = "角色权限菜单配置失败" }, JsonRequestBehavior.AllowGet);
                         }
                     }
-                  
-                   
                 }
             }
             catch (Exception ex)
@@ -132,6 +144,8 @@ namespace YiFlag.Manage.Controllers
                 return Json(new { state = -1, msg = "角色权限菜单配置出现异常" }, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
+
 
     }
 }

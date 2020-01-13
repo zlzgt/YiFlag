@@ -50,5 +50,23 @@ namespace YiFlag.Model
                 }
             }
         }
+
+        #region 根据Id判断是否有子节点
+        public bool IsHasChild(int id)
+        {
+            using(YiFlagContext dbContext=new YiFlagContext())
+            {
+                if(dbContext.Set<SysMenue>().Where(w=>w.ParentId==id).ToList().Count>0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        #endregion
+
     }
 }
