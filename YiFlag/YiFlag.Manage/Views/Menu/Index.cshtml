@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "菜单管理";
+}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">@ViewBag.Title</div>
+                <div class="layui-card-body" pad15>
+
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+
+                                <div class="layui-btn-container">
+                                    <button type="button" class="layui-btn layui-btn-sm">菜单树</button>
+                                </div>
+
+                                <div id="test12" class="demo-tree-more"></div>
+
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo">
+
+                                <form class="layui-form" action="">
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">上级Id</label>
+                                        <div class="layui-input-block">
+                                            <input id="ParentId" name="ParentId" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="用户名是必填项，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">名称</label>
+                                        <div class="layui-input-block">
+                                            <input id="Name" name="Name" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">图标</label>
+                                        <div class="layui-input-block">
+                                            <input id="Icon" name="Icon" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">URL</label>
+                                        <div class="layui-input-block">
+                                            <input id="URL" name="URL" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Code</label>
+                                        <div class="layui-input-block">
+                                            <input id="Code" name="Code" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">级别</label>
+                                        <div class="layui-input-block">
+                                            <input id="Level" name="Level" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">排序</label>
+                                        <div class="layui-input-block">
+                                            <input id="Sort" name="Sort" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">路径</label>
+                                        <div class="layui-input-block">
+                                            <input id="Path" name="Path" class="layui-input" type="text" placeholder="请输入" autocomplete="off" lay-verify="required" lay-reqtext="密码，岂能为空？">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button class="layui-btn" lay-filter="demo1" lay-submit="">保存</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        layui.use(['table', 'tree', 'util'], function () {
+            var table = layui.table;
+            var tree = layui.tree;
+            var layer = layui.layer;
+
+            //树形菜单初始化
+            tree.render({
+                elem: '#test12'
+                , data: treeGetData()
+                , showCheckbox: true  //是否显示复选框
+                , id: 'treeId'
+                , click: function (obj) {
+                    var data = obj.data;  //获取当前点击的节点数据
+                    alert(obj.data.id);
+                    $('#ParentId').val(obj.data.id);
+                    layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                }
+            });
+
+
+            //获取树形菜单
+            function treeGetData() {
+                var treedata = [];
+                $.ajax({
+                    url: '/Roles/GetMenueTree',
+                    type: "post",
+                    contentType: 'application/json',
+                    dataType: "json",
+                    async: false,   //这里不能使用异步
+                    success: function (res) {
+                        if (res.code == 1) {
+                            treedata = res.data;
+                        }
+                    }
+                });
+                return treedata;
+            }
+        });
+    </script>
+
+}

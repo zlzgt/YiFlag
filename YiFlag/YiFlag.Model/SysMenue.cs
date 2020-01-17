@@ -21,7 +21,6 @@ namespace YiFlag.Model
         [StringLength(128)]
         public string Url { get; set; }
 
-        [Required]
         [StringLength(64)]
         public string Code { get; set; }
 
