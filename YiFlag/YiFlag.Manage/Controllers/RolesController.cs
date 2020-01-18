@@ -90,9 +90,19 @@ namespace YiFlag.Manage.Controllers
         #region  设置角色权限
         public JsonResult SetRolesAuthority(string s, int rolesId)
         {
+            ReplyModel replyModel = new ReplyModel();
             DbContextTransaction transaction = null;
             try
             {
+                Account account = SessionHelper.GetSession<Account>("account");
+                if(rolesId==1)
+                {
+                    if(account.RoleID==1)
+                    {
+                        replyModel.msg = "不是超级管理员,不允许修改超级管理员权限";
+                        return Json(replyModel, JsonRequestBehavior.AllowGet);
+                    }
+                }
                 List<int> iResultList = new List<int>();
                 JsonReader reader = new JsonTextReader(new StringReader(s));
                 while (reader.Read())
