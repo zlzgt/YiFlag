@@ -83,7 +83,7 @@
 
                                     <div class="layui-form-item">
                                         <div class="layui-input-block">
-                                            <button class="layui-btn" lay-filter="demo1" lay-submit="">保存</button>
+                                            <button class="layui-btn" lay-filter="saveData" lay-submit="">保存</button>
                                         </div>
                                     </div>
                                 </form>
@@ -101,11 +101,10 @@
 @section Scripts{
     <script>
 
-        layui.use(['table', 'tree', 'util'], function () {
-            var table = layui.table;
+        layui.use(['table', 'form', 'tree', 'util'], function () {
             var tree = layui.tree;
             var layer = layui.layer;
-
+            var form = layui.form;
             //树形菜单初始化
             tree.render({
                 elem: '#test12'
@@ -119,7 +118,25 @@
                     layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
                 }
             });
-
+            form.on('submit(saveData)', function (data) {
+                $.ajax({
+                    url: '/Menu/Add',
+                    type: 'Post',
+                    dataType: 'json',
+                    contentType: "application/json",
+                    data: JSON.stringify(data.field),
+                    success: function (e) {
+                        if (e.code == 0) {
+                            layer.msg(e.msg);
+                        } else {
+                            layer.msg(e.msg);
+                        }
+                    },
+                    error: function (e) {
+                        layer.msg(e);
+                    }
+                })
+            })
 
             //获取树形菜单
             function treeGetData() {

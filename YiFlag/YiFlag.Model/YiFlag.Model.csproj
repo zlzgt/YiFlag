@@ -90,10 +90,12 @@
     <Compile Include="Base\MenueTree.cs" />
     <Compile Include="Base\Page.cs" />
     <Compile Include="Base\PageResult.cs" />
+    <Compile Include="Base\ReplyModel.cs" />
     <Compile Include="Base\Sys_MenuLogic.cs" />
     <Compile Include="Base\WebConfig.cs" />
     <Compile Include="Blog.cs" />
     <Compile Include="Factory\DbContextFactory.cs" />
+    <Compile Include="Menu\MenuModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SysAdmin.cs" />
     <Compile Include="SysAdminMenue.cs" />
