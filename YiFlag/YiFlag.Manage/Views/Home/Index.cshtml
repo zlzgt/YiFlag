@@ -63,58 +63,41 @@
                 <div class="layui-logo" lay-href="/Home/Console">
                     <span>@AdminManage.BackstageWebsite</span>
                 </div>
-
-                @Html.Raw(ViewData["MenuHtml"])
-
                 @*<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-                        <li data-name="home" class="layui-nav-item">
-                            <a href="javascript:;" lay-tips="主页" lay-direction="2">
-                                <i class="layui-icon layui-icon-home"></i>
-                                <cite>主页</cite>
-                            </a>
-                            <dl class="layui-nav-child">
-                                <dd data-name="console" class="layui-this">
-                                    <a lay-href="/Home/Console">控制台</a>
-                                </dd>
-                            </dl>
-                        </li>
+                    @Html.Raw(ViewData["MenuHtml"])
+                </ul>*@
 
-                        <li data-name="user" class="layui-nav-item">
-                            <a href="javascript:;" lay-tips="用户" lay-direction="2">
-                                <i class="layui-icon layui-icon-user"></i>
-                                <cite>用户</cite>
-                            </a>
-                            <dl class="layui-nav-child">
-                                <dd>
-                                    <a lay-href="/User/Info">网站用户</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;" onclick="layer.tips('即将开放', this);">后台管理员</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;" onclick="layer.tips('即将开放', this);">角色管理</a>
-                                </dd>
-                            </dl>
-                        </li>
-
-
-                        <li data-name="set" class="layui-nav-item">
-                            <a href="javascript:;" lay-tips="设置" lay-direction="2">
-                                <i class="layui-icon layui-icon-set"></i>
-                                <cite>设置</cite>
-                            </a>
-                            <dl class="layui-nav-child">
-                                <dd>
-                                    <a href="javascript:;">我的设置</a>
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+                    @{
+                        List<SysMenue> sysMenues = ViewBag.MenuList;
+                        foreach (SysMenue menu in sysMenues.Where(p => p.ParentId == 0).OrderBy(p => p.Sort))
+                        {
+                            <li data-name="set" class="layui-nav-item">
+                                <a href="javascript:;" lay-tips="@menu.Name" lay-direction="2">
+                                    <i class="@menu.Icon"></i>
+                                    <cite>@menu.Name</cite>
+                                </a>
+                                @foreach (SysMenue secondMenu in sysMenues.Where(p => p.ParentId == menu.Id).OrderBy(p => p.Sort))
+                                {
                                     <dl class="layui-nav-child">
-                                        <dd><a lay-href="/User/Index">基本资料</a></dd>
-                                        <dd><a lay-href="/User/Password">修改密码</a></dd>
+                                        <dd>
+                                            <a lay-href="@secondMenu.Url">@secondMenu.Name</a>
+                                            @if (sysMenues.Where(p => p.ParentId == secondMenu.Id).Count() > 0)
+                                            {
+                                                <dl class="layui-nav-child">
+                                                    @foreach (SysMenue thirdMenu in sysMenues.Where(p => p.ParentId == secondMenu.Id).OrderBy(p => p.Sort))
+                                                    {
+                                                        <dd><a lay-href="@thirdMenu.Url">@thirdMenu.Name</a></dd>
+                                                    }
+                                                </dl>
+                                            }
+                                        </dd>
                                     </dl>
-                                </dd>
-                            </dl>
-                        </li>
-                    </ul>*@
-
+                                }
+                            </li>
+                        }
+                    }
+                </ul>
             </div>
         </div>
 
@@ -155,10 +138,10 @@
 </div>
 @section Scripts{
     <script>
-            layui.config({
-                base: '../../LayUI/layuiadmin/' //静态资源所在路径
-            }).extend({
-                index: 'lib/index' //主入口模块
-            }).use('index');
+        layui.config({
+            base: '../../LayUI/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use('index');
     </script>
 }

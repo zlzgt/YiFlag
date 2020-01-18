@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using YiFlag.Model;
 
 namespace YiFlag.Manage.Controllers
 {
@@ -14,9 +15,11 @@ namespace YiFlag.Manage.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            StringBuilder _StringBuilder = new StringBuilder();
-            _Sys_MenuLogic.CreateMenus(0, _StringBuilder);
-            ViewData["MenuHtml"] = HttpUtility.HtmlDecode(_StringBuilder.ToString());
+            //StringBuilder _StringBuilder = new StringBuilder();
+            //_Sys_MenuLogic.CreateMenus(0, _StringBuilder);
+            // ViewData["MenuHtml"] = HttpUtility.HtmlDecode(_StringBuilder.ToString());
+            List<SysMenue> sysMenues= _Sys_MenuLogic.GetUserMenus();
+            ViewBag.MenuList = sysMenues;
             return View();
         }
         public ActionResult Console()
