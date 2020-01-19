@@ -16,7 +16,6 @@ namespace YiFlag.Manage.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public JsonResult Add(MenuModel msg)
         {
