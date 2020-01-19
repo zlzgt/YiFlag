@@ -14,7 +14,8 @@ namespace YiFlag.Manage
              "~/scripts/jquery-3.0.0.js"
              ));
             bundles.Add(new ScriptBundle("~/bundles/LayJs").Include(
-               //   "~/LayUI/layuiadmin/lib/admin.js",
+                //   "~/LayUI/layuiadmin/lib/admin.js",
+                "~/LayUI/layuiadmin/layui/DateUtils.js",
                   "~/LayUI/layuiadmin/layui/layui.js"
                 ));
 

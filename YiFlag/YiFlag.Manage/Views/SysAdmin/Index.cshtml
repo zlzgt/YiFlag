@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "后台用户管理";
+}
+@section Styles{
+    <style>
+        .layui-table-cell {
+            text-align: center;
+        }
+
+        .my-form {
+            margin-top: 5%;
+        }
+
+        .item {
+            margin-left: 130px;
+        }
+
+        .my-form-item {
+            padding-top: 20px;
+        }
+    </style>
+}
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">@ViewBag.Title</div>
+                <div class="layui-card-body" pad15>
+
+                    <a class="btn btn-primary" target="_blank" href="~/Content/Template/会员管理导入模板.xls">
+                        <i class="fa fa-file-excel-o"></i>&nbsp;下载导入模板
+                    </a>
+                    <form action="/FileUpload/UploadExecl" method="post" enctype="multipart/form-data">
+                        <input id="file" type="file" name="file" style="width: 250px; background: White" />
+                        <button>导入</button>
+                    </form>
+
+                    <table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+                    <script type="text/html" id="toolbarDemo">
+
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm layui-icon" lay-event="add">&#xe654;</button>
+                            <button class="layui-btn layui-btn-sm layui-icon" lay-event="batchDel">&#xe640;</button>
+                            <div class="layui-btn layui-btn-sm">
+                                <input type="text" name="search">
+                            </div>
+                            <button class="layui-btn layui-btn-sm layui-icon" lay-event="search">&#xe615;</button>
+                            <button class="layui-btn layui-btn-sm layui-icon" lay-event="flush">&#xe669;</button>
+                        </div>
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-xs layui-icon" lay-event="del">&#xe640;</a>
+    </script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table,
+                layer = layui.layer;
+            var $ = layui.$;
+            table.render({
+                url: "/SysAdmin/AdminList"   //换成自己的url
+                , method: "GET"
+                , elem: '#test'
+                , toolbar: '#toolbarDemo'
+                , title: '后台用户数据表'
+                , cellMinWidth: 80
+                , cols: [[
+                    { type: 'numbers' }
+                    , { type: 'checkbox' }
+                    , { field: 'Id', title: 'ID', width: 100, unresize: true, sort: true }
+                    , { field: 'UserName', title: '用户名', width: 120}
+                    , { field: 'State', title: '状态', width: 120 }
+                    , { field: 'RolesName', title: '权限名', width: 250 }
+                     , { field: 'Remark', title: '备注', width: 250 }
+                    , { field: 'CreateTime', title: '添加时间', width: 250,templet : "<div>{{getDateStr(d.CreateTime)}}</div>" }
+                    , { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 }
+                ]]
+                , page: true
+            });
+            //头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'add':
+                        layer.open({
+                            title:'添加后台用户',
+                            /*如果是外部的html，type2，内部，type1*/
+                            type: 2,
+                            btnAlign: 'c',
+                            area: ['800px', '600px'],
+                            content: '/SysAdmin/Add',
+                        });
+                        break;
+                    case 'batchDel':
+                        var data = checkStatus.data;
+                        layer.alert(JSON.stringify(data));
+                        $.ajax({
+                            url: '/SysAdmin/Delete',
+                            type: 'Post',
+                            dataType: 'json',
+                            contentType: "application/json",
+                            data: JSON.stringify(data),
+                            success: function (e) {
+                                if (e.code == 0) {
+                                    layer.msg(e.msg);
+                                } else {
+                                    layer.msg(e.msg);
+                                }
+                            },
+                            error: function (e) {
+                                layer.msg(e);
+                            }
+                        })
+
+                        /*发送ajax请求到后台执行批量删除*/
+                        break;
+                    case 'flush':
+                        table.reload('test', {
+                            url: "/SysAdmin/AdminList",
+                            where: {
+                                keyword: '',
+                            },
+                            page: {
+                                curr: 1
+                            }
+                        });
+                        break;
+                    case 'search':
+                        var name = $('input[name="search"]').val();
+                        table.reload('test', {
+                            url: '/SysAdmin/AdminList',    //换成自己的url
+                            where: {
+                                keyword: name,
+                            },
+                            page: {
+                                curr: 1
+                            }
+                        });
+                        break;
+                };
+            });
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'del') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del();
+                        layer.close(index);
+                        $.ajax({
+                            url: "/user/del",    //换成自己的url
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                id: data.id
+                            },
+                            success: function (e) {
+                                if (e.code == 0) {
+                                    layer.msg(e.msg);
+                                } else {
+                                    layer.msg(e.msg);
+                                }
+                            },
+                            error: function (e) {
+                                layer.msg(e);
+                            }
+                        })
+                    });
+                } else if (obj.event == 'add') {
+                    $.ajax({
+                        url: "/SysAdmin/add",      //这里换成自己的url即可
+                        type: "POST",
+                        dataType: "json",
+                        data: data,
+                        success: function (e) {
+                            if (e.code == 0) {
+                                layer.msg(e.msg);
+                            } else {
+                                layer.msg(e.msg);
+                            }
+                        },
+                        error: function (e) {
+                            layer.msg(e);
+                        }
+                    })
+                }
+            });
+        })
+    </script>
+}
