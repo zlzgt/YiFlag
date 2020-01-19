@@ -18,5 +18,6 @@ namespace YiFlag.Model
         public string Pwd { get; set; }
         //[Required(ErrorMessage ="验证码不能为空")]
         public string VerificationCode { get; set;}
+        public string Remember { get; set;}
     }
 }

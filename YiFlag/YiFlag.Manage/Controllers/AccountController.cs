@@ -27,6 +27,7 @@ namespace YiFlag.Manage.Controllers
         {
             if (ModelState.IsValid)
             {
+                string strPassWord = user.Pwd;
                 string logincode = CookieHelper.GetCookie("loginCode");
                 if (string.IsNullOrEmpty(logincode))
                 {
@@ -38,6 +39,11 @@ namespace YiFlag.Manage.Controllers
                     SysAdmin u = sysAdminMange.Login(user);
                     if (u != null)
                     {
+                        if(user.Remember == "on")
+                        {
+                            CookieHelper.SetCookie("UserName", u.UserName, 60);
+                            CookieHelper.SetCookie("PassWord", strPassWord, 60);
+                        }
                         Session[CurrentManage.SESSIONNAME] = u;
                         return Json(new { code = 0, msg = "登录成功" }, JsonRequestBehavior.AllowGet);
                     }
@@ -54,7 +60,7 @@ namespace YiFlag.Manage.Controllers
             }
             else
             {
-                string errorInfo=ModelErrorInfo.GetErrorInfo(ModelState.Values);
+                string errorInfo = ModelErrorInfo.GetErrorInfo(ModelState.Values);
                 return Json(new { code = -1, msg = errorInfo }, JsonRequestBehavior.AllowGet);
             }
         }

@@ -15,7 +15,7 @@
         <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
-                <input type="text" name="UserName" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
+                <input type="text"  name="UserName" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
             </div>
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="layui-form-item" style="margin-bottom: 20px;">
-                <input type="checkbox" name="remember" lay-skin="primary" title="记住密码">
+                <input type="checkbox" name="Remember" lay-skin="primary" title="记住密码">
                 <a href="forget.html" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>
             </div>
             <div class="layui-form-item">
@@ -64,53 +64,69 @@
 </div>
 @section Scripts{
     <script>
-  layui.config({
-      base: '../../LayUI/layuiadmin/' //静态资源所在路径
-  }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index', 'user'], function(){
-    var $ = layui.$
-    ,setter = layui.setter
-    ,admin = layui.admin
-    ,form = layui.form
-    ,router = layui.router()
-    ,search = router.search;
 
-    form.render();
-
-    //提交
-    form.on('submit(LAY-user-login-submit)', function(obj){
-      //请求登入接口
-      admin.req({
-         url:'/Account/Login' //实际使用请改成服务端真实接口
-        ,data: obj.field
-        ,done: function(res){
-            if (res.code == 0)
-            {
-                //登入成功的提示与跳转
-                layer.msg(res.msg, {
-                    offset: '15px'
-                  , icon: 1
-                  , time: 1000
-                }, function () {
-                    location.href = '/Home/Index'; //后台主页
-                });
+        function getCookie(name) {
+            var strcookie = document.cookie;//获取cookie字符串
+            var arrcookie = strcookie.split("; ");//分割
+            //遍历匹配
+            for (var i = 0; i < arrcookie.length; i++) {
+                var arr = arrcookie[i].split("=");
+                if (arr[0] == name) {
+                    return arr[1];
+                }
             }
-            else {
-                //登入成功的提示与跳转
-                layer.msg(res.msg, {
-                    offset: '15px'
-                  , icon: 2
-                  , time: 1000
-                }, function () {
-                    location.href = '/Account/Index';
-                });
-            }
-
+            return "";
         }
-      });
+        $(document).ready(function () {
+            $('#LAY-user-login-username').val(getCookie("UserName"));
+            $('#LAY-user-login-password').val(getCookie("PassWord"));
+        });
+        layui.config({
+            base: '../../LayUI/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'user'], function () {
+            var $ = layui.$
+                , setter = layui.setter
+                , admin = layui.admin
+                , form = layui.form
+                , router = layui.router()
+                , search = router.search;
 
-    });
-  });
+            form.render();
+
+            //提交
+            form.on('submit(LAY-user-login-submit)', function (obj) {
+                //请求登入接口
+                admin.req({
+                    url: '/Account/Login' //实际使用请改成服务端真实接口
+                    , data: obj.field
+                    , done: function (res) {
+                        if (res.code == 0) {
+                            //登入成功的提示与跳转
+                            layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.href = '/Home/Index'; //后台主页
+                            });
+                        }
+                        else {
+                            //登入成功的提示与跳转
+                            layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 2
+                                , time: 1000
+                            }, function () {
+                                location.href = '/Account/Index';
+                            });
+                        }
+
+                    }
+                });
+
+            });
+        });
     </script>
 }
