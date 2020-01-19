@@ -23,7 +23,7 @@
                         </div>
                         <div class="layui-col-xs6">
                             <div class="grid-demo">
-
+                                <p>添加菜单</p>
                                 <form class="layui-form" action="">
 
                                     <div class="layui-form-item">
@@ -109,13 +109,10 @@
             tree.render({
                 elem: '#test12'
                 , data: treeGetData()
-                , showCheckbox: true  //是否显示复选框
                 , id: 'treeId'
                 , click: function (obj) {
                     var data = obj.data;  //获取当前点击的节点数据
-                    alert(obj.data.id);
                     $('#ParentId').val(obj.data.id);
-                    layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
                 }
             });
             form.on('submit(saveData)', function (data) {
@@ -137,7 +134,6 @@
                     }
                 })
             })
-
             //获取树形菜单
             function treeGetData() {
                 var treedata = [];

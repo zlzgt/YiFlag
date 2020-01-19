@@ -14,15 +14,7 @@
                         <div class="layui-col-xs6">
                             <div class="grid-demo grid-demo-bg1">
 
-
                                 <table class="layui-hide" id="test" lay-filter="test"></table>
-
-                                <script type="text/html" id="toolbarDemo">
-                                    <div class="layui-btn-container">
-                                        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-                                    </div>
-                                </script>
-
 
                             </div>
                         </div>
@@ -96,7 +88,7 @@
                             }
                         }
                         else {
-                            alert("获取权限失败");
+                            layer.msg('获取权限失败');
                         }
                     },
                     error: function () {
@@ -104,17 +96,6 @@
                     }
                 });
             });
-            //头工具栏事件
-            table.on('toolbar(test)', function (obj) {
-                var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
-                switch (obj.event) {
-                    case 'getCheckData':
-                        var data = checkStatus.data;  //获取选中行数据
-                        layer.alert(JSON.stringify(data));
-                        break;
-                };
-            });
-
         });
 
         //获取树形菜单

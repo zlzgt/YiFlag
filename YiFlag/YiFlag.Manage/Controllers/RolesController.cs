@@ -97,7 +97,7 @@ namespace YiFlag.Manage.Controllers
                 Account account = SessionHelper.GetSession<Account>("account");
                 if(rolesId==1)
                 {
-                    if(account.RoleID==1)
+                    if(account.RoleID!=1)
                     {
                         replyModel.msg = "不是超级管理员,不允许修改超级管理员权限";
                         return Json(replyModel, JsonRequestBehavior.AllowGet);
